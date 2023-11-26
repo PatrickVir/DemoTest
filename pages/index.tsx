@@ -5,6 +5,8 @@ import {ColumnsType} from "antd/es/table";
 import {Button, Form, Input, message, Modal, Select, Space, Table, Tag} from "antd";
 import { faker } from '@faker-js/faker';
 import {User} from ".prisma/client";
+import {Author} from ".prisma/client";
+import {Book} from ".prisma/client";
 const inter = Inter({ subsets: ['latin'] })
 
 const layout = {
