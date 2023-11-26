@@ -71,18 +71,18 @@ export default function Home() {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: 'Name',
+      title: 'Title',
       dataIndex: 'name',
       key: 'name',
       render: (text) => <a>{text}</a>,
     },
     {
-      title: 'Email',
+      title: 'Author',
       dataIndex: 'email',
       key: 'email',
     },
     {
-      title: 'Address',
+      title: 'Genre',
       dataIndex: 'address',
       key: 'address',
     },
