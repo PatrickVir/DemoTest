@@ -1,12 +1,11 @@
-import { Inter } from 'next/font/google';
-import { useEffect, useState } from 'react';
-import { ColumnsType } from 'antd/es/table';
-import { Button, Form, Input, message, Modal, Select, Space, Table } from 'antd';
+
+import { Inter } from 'next/font/google'
+import {useEffect, useState} from "react";
+import {ColumnsType} from "antd/es/table";
+import {Button, Form, Input, message, Modal, Select, Space, Table, Tag} from "antd";
 import { faker } from '@faker-js/faker';
-import { User } from '.prisma/client';
-import { Author } from '.prisma/client';
-import { Book } from '.prisma/client';
-const inter = Inter({ subsets: ['latin'] });
+import {User} from ".prisma/client";
+const inter = Inter({ subsets: ['latin'] })
 
 const layout = {
   labelCol: { span: 8 },
@@ -19,200 +18,107 @@ const tailLayout = {
 
 export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
-  const [authors, setAuthors] = useState<Author[]>([]);
-  const [books, setBooks] = useState<Book[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
 
-  const fetchUsers = () => {
-    fetch('/api/all_user', { method: 'GET' }).then((res) => {
-      res.json().then((json) => {
-        setUsers(json);
-      });
-    });
-  };
-
-  const fetchAuthors = () => {
-    fetch('/api/all_author', { method: 'GET' }).then((res) => {
-      res.json().then((json) => {
-        setAuthors(json);
-      });
-    });
-  };
-
-  const fetchBooks = () => {
-    fetch('/api/all_book', { method: 'GET' }).then((res) => {
-      res.json().then((json) => {
-        setBooks(json);
-      });
-    });
-  };
-
-  useEffect(() => {
-    fetchUsers();
-    fetchAuthors();
-    fetchBooks();
-  }, []);
-
-  const onFinishUser = async (values: any) => {
-    // Implementation for creating a user
-    // ...
-
+  const onFinish = async (values: any) => {
+    console.log(values);
+    setIsModalOpen(false);
     fetch('/api/create_user', {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(values),
-    })
-      .then(async (response) => {
-        // Handle response
-        // ...
-        fetchUsers(); // Refresh the user list after creating a user
-      })
-      .catch((res) => {
-        message.error(res);
-      });
+      body: JSON.stringify(values)
+    }).then(async response => {
+      if (response.status === 200) {
+        const user = await response.json();
+        message.success('created user ' + user.name);
+        setUsers([...users, user]);
+
+      } else message.error(
+          `Failed to create user:\n ${JSON.stringify(await response.json())}`);
+    }).catch(res=>{message.error(res)})
   };
 
-  const onDeleteUser = async (user: any) => {
-    // Implementation for deleting a user
-    // ...
-
-    const { id } = user;
+  const onDelete = async (user: any) => {
+    const {id} = user;
+    setIsModalOpen(false);
     fetch('/api/delete_user', {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ id }),
-    })
-      .then(async (response) => {
-        // Handle response
-        // ...
-        fetchUsers(); // Refresh the user list after deleting a user
-      })
-      .catch((res) => {
-        message.error(res);
-      });
+      body: JSON.stringify({id})
+    }).then(async response => {
+      if (response.status === 200) {
+        await response.json();
+        message.success('Deleted user ' + user.name);
+        setUsers(users.filter(u=> u.id !== id ));
+
+      } else message.error(
+          `Failed to delete user:\n ${user.name}`);
+    }).catch(res=>{message.error(res)})
   };
 
-  const onFinishAuthor = async (values: any) => {
-    // Implementation for creating an author
-    // ...
+  const columns: ColumnsType<User> = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+      key: 'address',
+    },
 
-    fetch('/api/create_author', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values),
-    })
-      .then(async (response) => {
-        // Handle response
-        // ...
-        fetchAuthors(); // Refresh the author list after creating an author
-      })
-      .catch((res) => {
-        message.error(res);
-      });
-  };
-
-  const onDeleteAuthor = async (author: any) => {
-    // Implementation for deleting an author
-    // ...
-
-    const { id } = author;
-    fetch('/api/delete_author', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id }),
-    })
-      .then(async (response) => {
-        // Handle response
-        // ...
-        fetchAuthors(); // Refresh the author list after deleting an author
-      })
-      .catch((res) => {
-        message.error(res);
-      });
-  };
-
-  const onFinishBook = async (values: any) => {
-    // Implementation for creating a book
-    // ...
-
-    fetch('/api/create_book', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values),
-    })
-      .then(async (response) => {
-        // Handle response
-        // ...
-        fetchBooks(); // Refresh the book list after creating a book
-      })
-      .catch((res) => {
-        message.error(res);
-      });
-  };
-
-  const onDeleteBook = async (book: any) => {
-    // Implementation for deleting a book
-    // ...
-
-    const { id } = book;
-    fetch('/api/delete_book', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id }),
-    })
-      .then(async (response) => {
-        // Handle response
-        // ...
-        fetchBooks(); // Refresh the book list after deleting a book
-      })
-      .catch((res) => {
-        message.error(res);
-      });
-  };
-
-  // Similar to User columns
-  const columnsUsers: ColumnsType<User> = [
-    // ...
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+          <Space size="middle">
+            <a onClick={()=>onDelete(record)}>Delete</a>
+          </Space>
+      ),
+    },
   ];
 
-  // Similar to User columns
-  const columnsAuthors: ColumnsType<Author> = [
-    // ...
-  ];
-
-  // Similar to User columns
-  const columnsBooks: ColumnsType<Book> = [
-    // ...
-  ];
 
   const onReset = () => {
     form.resetFields();
   };
 
   const onFill = () => {
-    // Implementation for filling the form
-    // ...
-  };
+    const firstName = faker.person.firstName();
+    const lastName = faker.person.lastName();
+    const email = faker.internet.email({ firstName, lastName });
+    const street = faker.location.streetAddress();
+    const city = faker.location.city();
+    const state  = faker.location.state({ abbreviated: true });
+    const zip = faker.location.zipCode()
 
+    form.setFieldsValue({
+      name: `${firstName} ${lastName}`,
+      email: email,
+      address:
+          `${street}, ${city}, ${state}, US, ${zip}`
+    });
+  };
   const showModal = () => {
     setIsModalOpen(true);
     form.resetFields();
@@ -222,46 +128,59 @@ export default function Home() {
     setIsModalOpen(false);
     form.resetFields();
   };
+  useEffect(()=>{
+    fetch('api/all_user', {method: "GET"})
+        .then(res => {
+          res.json().then(
+              (json=> {setUsers(json)})
+          )
+        })
+  }, []);
 
-  const switchForm = (tab: string) => {
-    setIsModalOpen(true);
-    setActiveTab(tab);
-    form.resetFields();
-  };
+  if (!users) return "Give me a second";
 
-  const modalContent = {
-    'user': (
-      // Existing User form
-      // ...
-    ),
-    'author': (
-      // Author form
+  return  <>
+    <Button type="primary" onClick={showModal}>
+      Add User
+    </Button>
+    <Modal title="Basic Modal" onCancel={handleCancel}
+           open={isModalOpen} footer={null}  width={800}>
       <Form
-        {...layout}
-        form={form}
-        name="author-form"
-        onFinish={onFinishAuthor}
-        style={{ maxWidth: 600 }}
+          {...layout}
+          form={form}
+          name="control-hooks"
+          onFinish={onFinish}
+          style={{ maxWidth: 600 }}
       >
-        {/* Author form fields */}
-      </Form>
-    ),
-    'book': (
-      // Book form
-      <Form
-        {...layout}
-        form={form}
-        name="book-form"
-        onFinish={onFinishBook}
-        style={{ maxWidth: 600 }}
-      >
-        {/* Book form fields */}
-      </Form>
-    ),
-  }[activeTab];
+        <Form.Item name="Title" label="Name" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="Author" label="email" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="Genre" label="address" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
 
-  return (
-    <>
-      <Space size="middle">
-        <Button onClick={() => switchForm('user')}>Add User</Button>
-        <Button onClick
+        <Form.Item {...tailLayout} >
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+          <Button htmlType="button" onClick={onReset}>
+            Reset
+          </Button>
+          <Button  htmlType="button" onClick={onFill}>
+            Fill form
+          </Button>
+          <Button  htmlType="button" onClick={handleCancel}>
+            Cancel
+          </Button>
+        </Form.Item>
+      </Form>
+    </Modal>
+    {/*<p>{JSON.stringify(users)}</p>*/}
+    <Table columns={columns} dataSource={users} />;
+  </>;
+
+
+}
