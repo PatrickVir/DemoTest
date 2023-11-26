@@ -141,7 +141,7 @@ export default function Home() {
 
   return  <>
     <Button type="primary" onClick={showModal}>
-      Add User
+      Add Book
     </Button>
     <Modal title="Basic Modal" onCancel={handleCancel}
            open={isModalOpen} footer={null}  width={800}>
@@ -152,13 +152,13 @@ export default function Home() {
           onFinish={onFinish}
           style={{ maxWidth: 600 }}
       >
-        <Form.Item name="Title" label="Name" rules={[{ required: true }]}>
+        <Form.Item name="Title" label="Title" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="Author" label="email" rules={[{ required: true }]}>
+        <Form.Item name="Author" label="Author" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="Genre" label="address" rules={[{ required: true }]}>
+        <Form.Item name="Genre" label="Genre" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
 
