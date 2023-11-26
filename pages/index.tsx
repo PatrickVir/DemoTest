@@ -152,13 +152,13 @@ export default function Home() {
           onFinish={onFinish}
           style={{ maxWidth: 600 }}
       >
-        <Form.Item name="Title" label="Title" rules={[{ required: true }]}>
+        <Form.Item name="Name " label="Title" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="Author" label="Author" rules={[{ required: true }]}>
+        <Form.Item name="Email" label="Author" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="Genre" label="Genre" rules={[{ required: true }]}>
+        <Form.Item name="Address" label="Genre" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
 
