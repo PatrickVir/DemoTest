@@ -109,11 +109,10 @@ export default function Home() {
     const genre = faker.person.genre();
 
     form.setFieldsValue({
-      title: `${title}`,
-      ISBN: '$(ISBN)',
-      address:
-          `${genre}`
-    });
+    title: `${title}`,
+    ISBN: `${ISBN}`, 
+    genre: `${genre}`,  
+  });
   };
   const showModal = () => {
     setIsModalOpen(true);
