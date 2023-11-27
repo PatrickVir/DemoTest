@@ -71,20 +71,20 @@ export default function Home() {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
       render: (text) => <a>{text}</a>,
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
+      title: 'ISBN',
+      dataIndex: 'ISBN',
+      key: 'ISBN',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
+      title: 'genre',
+      dataIndex: 'genre',
+      key: 'genre',
     },
 
     {
@@ -104,19 +104,15 @@ export default function Home() {
   };
 
   const onFill = () => {
-    const firstName = faker.person.firstName();
-    const lastName = faker.person.lastName();
-    const email = faker.internet.email({ firstName, lastName });
-    const street = faker.location.streetAddress();
-    const city = faker.location.city();
-    const state  = faker.location.state({ abbreviated: true });
-    const zip = faker.location.zipCode()
+    const title = faker.person.title();
+    const ISBN = faker.person.ISBN();
+    const genre = faker.person.genre();
 
     form.setFieldsValue({
-      name: `${firstName} ${lastName}`,
-      email: email,
+      title: `${title}`,
+      ISBN: '$(ISBN)',
       address:
-          `${street}, ${city}, ${state}, US, ${zip}`
+          `${genre}`
     });
   };
   const showModal = () => {
@@ -152,13 +148,13 @@ export default function Home() {
           onFinish={onFinish}
           style={{ maxWidth: 600 }}
       >
-        <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+        <Form.Item name="title" label="title" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="email" label="email" rules={[{ required: true }]}>
+        <Form.Item name="ISBN" label="ISBN" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="address" label="address" rules={[{ required: true }]}>
+        <Form.Item name="genre" label="genre" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
 
