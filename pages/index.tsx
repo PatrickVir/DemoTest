@@ -71,18 +71,18 @@ export default function Home() {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: 'Title',
+      title: 'Name',
       dataIndex: 'name',
       key: 'name',
       render: (text) => <a>{text}</a>,
     },
     {
-      title: 'Author',
+      title: 'Email',
       dataIndex: 'email',
       key: 'email',
     },
     {
-      title: 'Genre',
+      title: 'Address',
       dataIndex: 'address',
       key: 'address',
     },
@@ -141,7 +141,7 @@ export default function Home() {
 
   return  <>
     <Button type="primary" onClick={showModal}>
-      Add Book
+      Add User
     </Button>
     <Modal title="Basic Modal" onCancel={handleCancel}
            open={isModalOpen} footer={null}  width={800}>
@@ -152,13 +152,13 @@ export default function Home() {
           onFinish={onFinish}
           style={{ maxWidth: 600 }}
       >
-        <Form.Item name="Name " label="Title" rules={[{ required: true }]}>
+        <Form.Item name="name" label="Name" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="Email" label="Author" rules={[{ required: true }]}>
+        <Form.Item name="email" label="email" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="Address" label="Genre" rules={[{ required: true }]}>
+        <Form.Item name="address" label="address" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
 
